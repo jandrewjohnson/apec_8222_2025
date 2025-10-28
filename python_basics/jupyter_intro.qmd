@@ -1,0 +1,59 @@
+---
+jupyter: python3
+---
+
+Jupyter notebooks are becoming dominant in replicable, open-soure science. A Jupyter notebook combines nicely-formatted conent with images, typesetting, equations, etc. with code blocks that can be directly run. Here, we're going to practice using Jupyter and use it to learn some basics of Python.
+
+## Jupyter has two kinds of cells
+
+1.  Markdown cells (like this one)
+2.  Code cells (like the next one)
+
+Above the editor window here, you can click +Code or +Markdown to add new ones.
+
+Alternatively, right-click on a cell for more options (like splitting a cell into two)
+
+Markdown cells are meant for formatted content, pictures, lecture notes etc. and follows the same notation as R-markdown.
+
+If you want to edit a markdown cell, double left-click it. To finalize the edits, click the checkmark above (or type ctrl-enter).
+
+## Code runs IN the notebook.
+
+Select the python cell below. You can edit it freely. To run it, you can click the triangle button ("play button") to the upper right of that cell. Alternatively, you can ctrl-enter.
+
+```{python}
+#| pycharm: {name: "#%%\n"}
+a = 5
+b = 4
+simple_summation = a + b
+```
+
+You know the cell has run successfully if it gets a green check at the bottom. Also notice that there is a number now in the \[ \] box at the bottom left. This indicates which cell this was run in order of all the cells run.
+
+Notice that it doesn't output anything, but note that the values are now stored in the Python Kernel (Jupyter Server) and are available to other parts of this notebook.
+
+If you want to see a variable outputted, you can just type the variable name.
+
+```{python}
+simple_summation
+```
+
+You can also use the print command, but this will supress non-printed variables.
+
+```{python}
+print('Rounded: ', simple_summation)
+```
+
+## Order matters
+
+The second python cell would fail if the first one wasn't run.
+y
+You can run the whole program via the double-play Run icon above.
+
+## In-class exercise 1.1
+
+Below, add two cells to this notebook.
+
+First, create a markdown cell where you have a header and some paragraph text. To make something a header in Markdown language, just use a hashtag and a space before the title. To make it a paragraph, just separate it with a blank line in between. Finally, add a bulletted list with a few entries. To do this, just have a dash at the beginning of each new bullet.
+
+Second, create a python cell. Save a variable that is the sum of all primes between 3 and 10. Print that sum.
