@@ -1,0 +1,847 @@
+---
+title: Overview for today
+jupyter: python3
+---
+
+
+- Yesterday, we connected to GitHub and gave a brutally quick introduction to Python.
+- Today we’re going to:
+    - Pickup where we left off
+    - Learn more about Numpy
+    - Learn about spatial data in Python
+    - Do raster-math “at scale”
+    - If there’s time, start into our first Machine Learning model
+
+# Introduction to big and spatial data
+- Example from recent publication in Ecological Economics
+![](images/lec3_image3.png){width=70% #fig-3_3}
+
+- Combined both econometrics and “big-data array manipulation”
+![](images/lec3_image2.png){width=70% #fig-3_2}
+
+## Topics to be covered
+
+-   **Basic Rules/Syntax of Python** (Don't worry about memorizing these, just be aware of them. We will see them again, again and again.)
+    -   Indentation
+    -   Pythonic Code
+    -   Rules of Functions\
+    -   Comments and Docstrings
+    -   Error Handling
+    -   Importing Packages
+-   **Variables, Data Types and Operators**
+    -   Naming Conventions
+    -   Basic Data Types
+-   **Data Structures:**
+    -   `Lists`, `tuples`, `sets`, and `dictionaries`.
+    -   Basic operations and methods associated with these data structures.
+    -   Understanding mutability and immutability.
+-   **Control Flows**
+    -   Conditionals (`if`, `elif`, `else`).
+    -   Loops (`for`, `while`).
+    -   Loop control statements (`break`, `continue`).
+-   **Functions**:
+    -   Defining and calling functions.
+    -   Arguments and return values.
+-   **File Handling:**
+    -   Reading from and writing to files.
+    -   Working with paths and directories.
+-   Other Python Types
+
+# **Basic Rules/Syntax of Python**
+
+# Python is not a "statically typed" language
+
+
+```{python}
+# Comments: The hashtag makes the rest of the line a comment. The more programming you do, the more you focus on making good comments.
+# Jupyter lets you write formatted text, but you'll still want to put comments in the raw python.
+
+# Assign some numbers to variables
+a = 5  # Here, we implicitly told python that a is an integer
+b = 4.6  # Here, we told python that b is a floating point number (a decimal)
+```
+
+-   Even though nothing is outputted above, our Python "Kernel" has the values to each variable stored for later use.
+
+-   Notice that, we can add an integer and the float (a floating point number, i.e., one with a decimal point). Python "smartly" redefines variables so that they work together.
+
+-   This is different from other languages which require you to manually manage the "types" of your variables.
+
+```{python}
+# Python as a calculator. 
+sum_of_two_numbers = a + b
+
+# Printing output to the console
+print('Our output was', sum_of_two_numbers)
+```
+
+```{python}
+sum_as_int = int(sum_of_two_numbers)
+sum_as_int_back_to_float = float(sum_as_int)
+
+print('We lost some precision in this operation:', sum_as_int_back_to_float)
+```
+
+# Indentation
+
+Indentation is crucial in Python as it indicates a block of code. Each level of indentation should be exactly 4 spaces.
+
+We also see the `for` and `range` concepts here, which we will learn below.
+
+```{python}
+# Example:
+for i in range(5):
+    print(i)  # 4 spaces for indentation
+    if i == 3:
+        break  # 4 spaces for indentation
+```
+
+# Importing Packages
+
+You can import packages on single lines or as a comma-separated list
+
+```{python}
+# Built-in packages via the Python Standard Library
+import math
+import os, sys, time, random
+
+# Using imported modules
+number_rounded_down = math.floor(sum_of_two_numbers)
+print(number_rounded_down)
+```
+
+# Using packages from elsewhere
+
+When we used the `mamba` command, we installed a ton of packages. These were not "built-in" to python like the ones above. Here we will import them into our notebook to use.
+
+This will also illustrate the use of numpy. We'll use it so much we us the `as` code to name it something shorter.
+
+```{python}
+import numpy as np # This is a short name for numpy. We'll use it a lot.
+
+# Create an 2 by 3 array of integers
+small_array = np.array([[5, 3, 5], [6, 6, 5]])
+
+print('Here\'s a small numpy array\n', small_array)
+
+# Sidenote: from above backspace \ put in front of a character is the
+# "escape character," which makes python interpret the next thing as a string or special text operator. \n makes a line break
+```
+
+# **Variables, Data Types and Operators**
+
+# Python Naming Conventions
+
+Adhering to a naming convention is crucial for readability and maintainability of the code. In Python, the following naming conventions are widely used:
+
+-   **Variables and Functions**: Use `snake_case` where all letters are lowercase with underscores between words.
+
+```{python}
+# Example:
+variable_name = "hello world"
+def function_name(parameter_one, parameter_two):
+    pass
+```
+
+-   **Constants**: Use `UPPER_SNAKE_CASE` where all letters are uppercase with underscores between words.
+
+```{python}
+# Example:
+PI = 3.14159
+MAX_SIZE = 100
+```
+
+-   **Classes**: Use `PascalCase` where the first letter of each word is uppercase with no underscores between words.
+
+```{python}
+# Example:
+class ClassName:
+    pass
+```
+
+# Understanding Variables and Data Types in Python
+
+Here is a table to guide you through the different data types in Python, since most of you are coming from R.
+
+| Description            | R Data Type       | Python Data Type | Python Example             |
+|--------------------|------------------|------------------|------------------|
+| Integer Numbers        | integer           | int              | `x = 5`                    |
+| Floating-Point Numbers | numeric or double | float            | `y = 5.0`                  |
+| Character Strings      | character         | str              | `z = "hello"`              |
+| Boolean Values         | logical           | bool             | `a = True`                 |
+| Complex Numbers        | complex           | complex          | `b = 3 + 4j`               |
+| Vectors (1D array)     | vector            | list             | `c = [1, 2, 3]`            |
+| Named Vectors          | named vector      | dict             | `d = {"one": 1, "two": 2}` |
+
+Variables are containers for storing data values. Unlike R, Python does not require declaring the variable type, it gets converted automatically based on the value it holds.
+
+```{python}
+# Assigning a value to a variable
+x = 10  # x is now an integer variable with a value of 10
+```
+
+# Data Types in Python
+
+Let's delve into the basic data types available in Python:
+
+## 1. Integer:
+
+Whole numbers without decimals.
+
+```{python}
+x = 5
+type(x)  # Output: <class 'int'>
+```
+
+## 2. Float:
+
+Decimal numbers.
+
+```{python}
+y = 5.0
+type(y)  # Output: <class 'float'>
+```
+
+## 3. String:
+
+Sequence of characters.
+
+```{python}
+# Assign some text (a string) to a variable
+
+some_text = 'This is the text.'
+type(some_text)  # Output: <class 'str'>
+```
+
+```{python}
+# Here is a multi line string: (also discusses improved capabilities of an IDE editor)
+
+things_you_can_do_in_vs_code_that_you_cant_do_without_an_ide = """
+1.) Move back and forth in your history of cursor positions (using your mouse forward and back buttons)
+2.) Edit on multiple lines at the same time (hold alt and click new spots)
+3.) Smartly paste DIFFERENT values
+4.) Duplicate lines (alt-shift-downarrow) or just move them (alt-uparrow or alt-downarrow)
+5.) Introspection (e.g., jump between function definition and usages)
+6.) Debugging (Interactively walk through your code one line at a time. WE WILL LEARN THIS!)
+7.) Profiling your code (see which lines take the most time to compute.)
+"""
+```
+
+## 4. Boolean:
+
+True or False values.
+
+```{python}
+a = True
+type(a)  # Output: <class 'bool'>
+```
+
+## 5. Complex:
+
+Numbers with real and imaginary parts.
+
+```{python}
+b = 3 + 4j
+type(b)  # Output: <class 'complex'>
+```
+
+## 6. List:
+
+Ordered collection of items.
+
+```{python}
+c = [1, 2, 3]
+type(c)  # Output: <class 'list'>
+```
+
+## 7. Dictionary:
+
+Unordered collection of items with key-value pairs.
+
+```{python}
+d = {"one": 1, "two": 2}
+type(d)  # Output: <class 'dict'>
+```
+
+# In-Class Exercise 2.1
+
+::: panel-tabset
+#### Questions
+
+1.  Create a variable `my_name` to store your name as a string, and a variable `my_age` to store your age as an integer. Print the type of both variables.
+2.  Create a list `my_info` containing your name, age, and a boolean value indicating whether you have any programming experience (True or False).
+3.  Create a dictionary `my_info_dict` with the same information as above, but with the keys `"name"`, `"age"`, and `"has_programming_experience"`. Print this out.
+
+#### Answer Key
+
+```{python}
+# Question 1:
+my_name = "John Doe"
+my_age = 25
+print(type(my_name))  # Output: <class 'str'>
+print(type(my_age))  # Output: <class 'int'>
+
+# Question 2:
+my_info = ["John Doe", 25, True]
+```
+
+:::
+
+## Understanding Data Structures in Python
+
+Data structures are a way of organizing and storing data so that they can be accessed and worked with efficiently. Python has built-in data structures like lists, tuples, sets, and dictionaries.
+
+| Description                  | R Data Structure         | Python Data Structure | Python Example               |
+|------------------|------------------|------------------|--------------------|
+| Ordered collection           | List                     | List                  | `my_list = [1, 2, 3]`        |
+| Immutable ordered collection | NA                       | Tuple                 | `my_tuple = (1, 2, 3)`       |
+| Unordered collection         | Set                      | Set                   | `my_set = {1, 2, 3}`         |
+| Key-Value pairs              | Named list or data frame | Dictionary            | `my_dict = {'a': 1, 'b': 2}` |
+
+### Lists
+
+Lists are ordered collections of items which are mutable.
+
+```{python}
+my_list = [1, 2, 3, 4]
+my_list.append(5)  # Adds 5 to the end of the list
+print(my_list)  # Output: [1, 2, 3, 4, 5]
+```
+
+Lists in Python are mutable, meaning that you can change their content after they are created.
+
+```{python}
+# Creating a list
+my_list = [1, 2, 3]
+print(my_list)  # Output: [1, 2, 3]
+
+# Modifying the list
+my_list[0] = 0
+print(my_list)  # Output: [0, 2, 3]
+```
+
+A very useful way to generate a list is with the range() function. The syntax is range(start, stop, step). The start is the first number in the list, the stop is the last number in the list, and the step is the amount by which the list increases. If you don't specify a start, it will default to 0. If you don't specify a step, it will default to 1.
+
+```{python}
+# Create a list from 0 to 10. NOTICE that the stop number is NOT included.
+my_list = list(range(11))
+print(my_list)  # Output: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+
+# Create a list of even numbers from 2 to 22
+my_list = list(range(2, 23, 2))
+print(my_list)  # Output: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22]
+```
+
+### Tuples
+
+Tuples are similar to lists, but they are immutable.
+
+```{python}
+my_tuple = (1, 2, 3, 4)
+# my_tuple.append(5)  # This will raise an AttributeError as tuples are immutable
+```
+
+### Sets
+
+Sets are unordered collections of unique elements.
+
+```{python}
+my_set = {1, 2, 3, 3}
+print(my_set)  # Output: {1, 2, 3} as sets only allow unique values
+```
+
+### Dictionaries
+
+Dictionaries are unordered collections of key-value pairs.
+
+```{python}
+my_dict = {'a': 1, 'b': 2}
+print(my_dict['a'])  # Output: 1
+```
+
+Dictionaries are also mutable, allowing you to change, add, or remove key-value pairs after the dictionary is defined.
+
+```{python}
+# Creating a dictionary
+my_dict = {'a': 1, 'b': 2}
+print(my_dict)  # Output: {'a': 1, 'b': 2}
+
+# Modifying the dictionary
+my_dict['a'] = 0
+print(my_dict)  # Output: {'a': 0, 'b': 2}
+
+
+# Dictionaries
+dictionary_1 = {23: "Favorite number", 24: "Second favorite number"}
+print('dictionary_1', dictionary_1)
+```
+
+```{python}
+x = 15
+y = 4
+
+# Addition
+print('x + y =', x + y)  # Output: x + y = 19
+
+# Subtraction
+print('x - y =', x - y)  # Output: x - y = 11
+
+# Multiplication
+print('x * y =', x * y)  # Output: x * y = 60
+
+# Division
+print('x / y =', x / y)  # Output: x / y = 3.75
+
+# Exponentiation
+print('x ** y =', x ** y)  # Output: x ** y = 50625
+
+# Modulus/Modulo/Remainder
+print('x % y =', x % y)  # Output: x % y = 3    
+```
+
+## Comparison Operators
+
+Comparison operators are used to compare values. It either returns True or False according to the condition.
+
+```{python}
+x = 10
+y = 12
+
+# Greater than
+print('x > y is', x > y)  # Output: x > y is False
+
+# Less than
+print('x < y is', x < y)  # Output: x < y is True
+
+# Equal to
+print('x == y is', x == y)  # Output: x == y is False
+```
+
+## Logical Operators
+
+Logical operators are used to combine conditional statements.
+
+```{python}
+x = True
+y = False
+
+# and operator
+print('x and y is', x and y)  # Output: x and y is False
+
+# or operator
+print('x or y is', x or y)  # Output: x or y is True
+
+# not operator
+print('not x is', not x)  # Output: not x is False
+```
+
+```{python}
+x = 20
+y = 15
+
+if x > y:
+    print("x is greater than y")
+elif x < y:
+    print("x is less than y")
+else:
+    print("x is equal to y")
+```
+
+# Loops (`for`, `while`)
+
+Loops in Python are used to execute a block of code repeatedly.
+
+## For Loop:
+
+```{python}
+for i in range(5):
+    print(i)  # Output: 0 1 2 3 4
+```
+
+## While Loop:
+
+```{python}
+i = 0
+while i < 5:
+    print(i)  # Output: 0 1 2 3 4
+    i += 1
+```
+
+## Complex Looping:
+
+```{python}
+small_range = range(0, 10)
+print('small_range:', small_range)
+
+small_range_as_list = list(range(0, 10))
+print('small_range_as_list:', small_range_as_list)
+
+# Here is a for loop. Also note that python EXPLICITLY USES TAB-LEVEL to denote nested things.
+# I.e., the inner part of the loop is tabbed 1 level up. Python does not use { like  R.
+# I LOVE this notation and it's a big part of why python is so pretty and readable.
+sum = 0 # Set the initial variable values
+num = 0
+sum_with_some = 0
+for i in range(100, 136, 3):
+    sum = sum + i
+    num = num + 1
+
+    # loop within a loop
+    for j in range(200, 205):
+        sum_with_some = sum + j
+
+mean = sum / num
+print('mean', mean)
+```
+
+# Loop Control Statements (`break`)
+
+Loop control statements change the execution of the loop from its normal sequence.
+
+#### Break:
+
+```{python}
+for i in range(5):
+    if i == 3:
+        break
+    print(i)  # Output: 0 1 2
+```
+
+### In-Class Exercise
+
+::: panel-tabset
+#### Questions
+
+1.  **Simple Exercise 1**: Write a Python program to find and print the largest among three numbers. Hint: Use if/ellif/else statements.
+
+2.  **Simple Exercise 2**: Write a Python program to check whether a given year is a leap year or not. The rule is that a year is a leap year if it is divisible by 4 but not by 100, unless it is divisible by 400. You may want to use the modulo operator (%)
+
+3.  **Challenging Exercise**: Create a Python program to find all prime numbers within a given range. (Hint: A prime number is a natural number greater than 1 that has no positive divisors other than 1 and itself). Again, you can use % to see if there is a non-zero remainder.
+
+#### Answer Key
+
+```{python}
+# Simple Exercise 1:
+num1 = 10
+num2 = 14
+num3 = 12
+
+if (num1 >= num2) and (num1 >= num3):
+    largest = num1
+elif (num2 >= num1) and (num2 >= num3):
+    largest = num2
+else:
+    largest = num3
+
+print(f'The largest number is {largest}')
+
+# Simple Exercise 2:
+year = 2020
+
+if (year % 4) == 0:
+    if (year % 100) == 0:
+        if (year % 400) == 0:
+            print(f'{year} is a leap year')
+        else:
+            print(f'{year} is not a leap year')
+    else:
+        print(f'{year} is a leap year')
+else:
+    print(f'{year} is not a leap year')
+
+# Challenging Exercise:
+def find_primes(start, end):
+    prime_numbers = []
+    for num in range(start, end + 1):
+        if num > 1:  # Prime numbers are greater than 1
+            for i in range(2, num):
+                if (num % i) == 0:  # If num is divisible by any number before itself
+                    break  # It's not a prime number
+            else:
+                prime_numbers.append(num)  # Else, it's a prime number
+    return prime_numbers
+
+# Call the function with a range
+primes = find_primes(10, 50)
+print(primes)  # Output: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
+```
+
+:::
+
+## Understanding Functions in Python
+
+Functions are blocks of code that are designed to do one specific job. In Python, a function is defined using the `def` keyword. Functions can receive inputs and return outputs.
+
+### Defining and Calling Functions
+
+Here's how you can define a simple function and call it:
+
+```{python}
+# Example1:
+def my_function(input_parameter_1, input_parameter_2):
+    product = input_parameter_1 * input_parameter_2
+    return product
+
+# Use the function
+value_returned = my_function(2, 7)
+print(value_returned)
+```
+
+### Arguments and Return Values
+
+Functions can take arguments as input and can return values. Arguments provide extra information that a function needs to perform its task. Return values allow a function to process data and return a result.
+
+```{python}
+# Function with arguments and return value
+def add_numbers(num1, num2):
+    """Return the sum of two numbers."""  # Docstring
+    sum_result = num1 + num2
+    return sum_result
+
+# Calling the function and storing the return value
+sum_value = add_numbers(5, 3)
+print(sum_value)  # Output: 8
+```
+
+### In-Class Exercise
+
+::: panel-tabset
+#### Questions
+
+1.  **Simple Exercise 1**: Create a function called `multiply` that takes two arguments and returns their product.
+2.  **Simple Exercise 2**: Create a function called `is_even` that takes a number as an argument and returns `True` if the number is even, `False` otherwise.
+3.  **Challenging Exercise**: Create a function called `factorial` that takes a number as an argument and returns the factorial of that number.
+
+#### Answer Key
+
+```{python}
+# Simple Exercise 1:
+def multiply(num1, num2):
+    return num1 * num2
+
+product = multiply(4, 5)
+print(product)  # Output: 20
+
+# Simple Exercise 2:
+def is_even(number):
+    return number % 2 == 0
+
+print(is_even(4))  # Output: True
+print(is_even(5))  # Output: False
+
+# Challenging Exercise:
+def factorial(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return n * factorial(n - 1)
+
+print(factorial(5))  # Output: 120
+```
+
+:::
+
+```{python}
+# In-class exercise workspace
+```
+
+## More In-class Comprehensive exercise (Participation points note!)
+
+::: panel-tabset
+### Question
+
+I will call on a random table to show me their answer via their table's monitor.
+
+Make a function that returns the square of a number. Combine the function with a loop to calculate the Sum of Squared Numbers from 1 to 100.
+
+HINT, \*\* is the exponent operator in python.
+
+BONUS: Make sure you're actually right by inserting a print statement in each step.
+
+BONUS-bonus: Store each stage of the results in a list using `your_list = []` and `your_list.append(thing_to_add_to_your_list)`
+
+### Answer Key for In-class Comprehensive exercise
+
+```{python}
+# Define the function to calculate the square of a number
+def square(num):
+    return num ** 2
+
+# Initialize variables
+sum_of_squares = 0  # To keep track of the sum of squares
+your_list = []  # To store each stage of the results
+
+# Loop through numbers from 1 to 100
+for i in range(1, 101):
+    squared_value = square(i)  # Get the square of the current number
+    sum_of_squares += squared_value  # Add the squared value to the sum
+    your_list.append(squared_value)  # Append the squared value to the list
+
+    # Bonus: Print statement to check each step
+    print(f'Number: {i}, Squared Value: {squared_value}, Sum of Squares: {sum_of_squares}')
+
+# Final result
+print(f'Sum of Squared Numbers from 1 to 100: {sum_of_squares}')
+
+# Bonus-bonus: Print the list of squared values
+print(f'List of Squared Values: {your_list}')
+```
+
+**Note**: 1. A function named `square` is defined to calculate the square of a given number using the exponent operator (`**`). 2. A variable `sum_of_squares` is initialized to 0 to keep track of the sum of squared numbers. 3. A list named `your_list` is initialized to store each stage of the results. 4. A `for` loop is used to iterate through the numbers from 1 to 100. - Inside the loop, the `square` function is called to get the squared value of the current number. - The squared value is added to `sum_of_squares` and appended to `your_list`. - A print statement is included to check each step (Bonus). 5. The final sum of squared numbers is printed, along with the list of squared values (Bonus-bonus).
+:::
+
+# Appendix and Extra materials
+
+### Pythonic Code
+
+Writing Pythonic code means following the idiomatic practices of the Python community to ensure that your code is readable, clean, and efficient. Here are some examples:
+
+-   Use list comprehensions for concise code:
+
+```{python}
+# Example:
+squares = [x**2 for x in range(10)]
+```
+
+-   Use `enumerate` if you need to iterate over the indices and values of a list:
+
+```{python}
+# Define my_list before using it
+my_list = [1, 2, 3, 4, 5]
+
+# Now you can use my_list in your for loop
+for index, value in enumerate(my_list):
+    print(f'Index: {index}, Value: {value}')
+```
+
+### Functions (we will talk about it more later)
+
+-   Functions should have a small number of arguments and do one thing. This makes them easier to test and understand.
+-   Use descriptive names for functions and parameters.
+-   Functions should return values instead of printing or modifying global variables.
+
+```{python}
+# Example:
+def calculate_area(length, width):
+    return length * width
+```
+
+### Comments and Docstrings
+
+-   Comments should explain the "why" and "how" of the code, not just the "what".
+-   Use docstrings (triple double quotes) at the beginning of your functions, classes, and modules to describe what they do.
+
+```{python}
+# Example:
+def add_numbers(a, b):
+    """
+    This function adds two numbers and returns the result.
+    :param a: The first number to add.
+    :param b: The second number to add.
+    :return: The sum of a and b.
+    """
+    return a + b
+```
+
+#### In-Class Exercise
+
+::: panel-tabset
+##### Questions
+
+1.  Evaluate the following expressions and note down the output:
+    -   `5 * 3 + 2`
+    -   `8 // 5 - 3`
+    -   `5 + 4 * 3 / 2`
+    -   `5 != 3 and 4 > 3 or 2 < 1`
+2.  Given two variables `a = 10` and `b = 20`, swap their values without using a temporary variable.
+
+##### Answer Key
+
+```{python}
+# Question 1:
+# Output: 17, -3, 11.0, True
+
+# Question 2:
+a = 10
+b = 20
+a, b = b, a  # a becomes 20 and b becomes 10
+```
+
+:::
+
+**Discussion point**
+
+**The array above looks identical to the nested lists we made. It IS NOT! It is a numpy array that is ridiculously fast and can scale up to massive, massive data questions. The optional reading for today (Harris et al. 2020, Nature) discusses how these arrays have formed the backbone of modern scientific computing.**
+
+```{python}
+low = 3
+high = 8
+shape = (1000, 1000)
+
+smallish_random_array = np.random.randint(low, high, shape)
+
+print('Here\'s a slightly larger numpy array\n', smallish_random_array)
+```
+
+### Immutability
+
+#### Tuples:
+
+Tuples are immutable, meaning that their content cannot be changed after creation.
+
+```{python}
+# Creating a tuple
+my_tuple = (1, 2, 3)
+print(my_tuple)  # Output: (1, 2, 3)
+
+# Attempting to modify the tuple
+# This will raise a TypeError as tuples are immutable
+
+#TRY THIS OUT! Uncomment the line below and see what happens!
+
+#my_tuple[0] = 0  # Error: 'tuple' object does not support item assignment. 
+```
+
+#### Sets:
+
+Actually, sets are mutable collections; however, the elements within the set must be immutable.
+
+```{python}
+# Creating a set
+my_set = {1, 2, 3}
+print(my_set)  # Output: {1, 2, 3}
+
+# Adding an element to the set
+my_set.add(4)
+print(my_set)  # Output: {1, 2, 3, 4}
+
+# Removing an element from the set
+my_set.remove(1)
+print(my_set)  # Output: {2, 3, 4}
+```
+
+In the examples above, you can observe that lists and dictionaries allow their content to be changed after creation, demonstrating mutability. On the other hand, tuples do not allow their content to be altered, showcasing immutability. The sets example demonstrates the mutability of sets, but it's important to note that the elements within the set must be of immutable types.
+
+### In-Class Exercise
+
+::: panel-tabset
+#### Questions
+
+1.  **Simple Exercise 1**: Create a list of the first 10 even numbers.
+2.  **Simple Exercise 2**: Create a dictionary where the keys are the numbers from 1 to 5 and the values are the squares of the keys.
+3.  **Challenging Exercise**: Given a list of numbers, write a program to find the sum of all positive numbers in the list.
+
+#### Answer Key
+
+```{python}
+# Simple Exercise 1:
+even_numbers = [x * 2 for x in range(1, 11)]
+print(even_numbers)  # Output: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
+
+# Simple Exercise 2:
+squares_dict = {x: x**2 for x in range(1, 6)}
+print(squares_dict)  # Output: {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+```
+
+:::
+
