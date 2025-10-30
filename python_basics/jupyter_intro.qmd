@@ -1,6 +1,4 @@
----
-jupyter: python3
----
+# Jupter Intro
 
 Jupyter notebooks are becoming dominant in replicable, open-soure science. A Jupyter notebook combines nicely-formatted conent with images, typesetting, equations, etc. with code blocks that can be directly run. Here, we're going to practice using Jupyter and use it to learn some basics of Python.
 
