@@ -19,6 +19,8 @@ If you want to edit a markdown cell, double left-click it. To finalize the edits
 
 ## Code runs IN the notebook.
 
+$$E=mc^2$$
+
 Select the python cell below. You can edit it freely. To run it, you can click the triangle button ("play button") to the upper right of that cell. Alternatively, you can ctrl-enter.
 
 ```{python}
@@ -46,9 +48,7 @@ print('Rounded: ', simple_summation)
 
 ## Order matters
 
-The second python cell would fail if the first one wasn't run.
-y
-You can run the whole program via the double-play Run icon above.
+The second python cell would fail if the first one wasn't run. y You can run the whole program via the double-play Run icon above.
 
 ## In-class exercise 1.1
 
