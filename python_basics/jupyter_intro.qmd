@@ -1,6 +1,4 @@
----
-jupyter: python3
----
+# Jupter Intro
 
 Jupyter notebooks are becoming dominant in replicable, open-soure science. A Jupyter notebook combines nicely-formatted conent with images, typesetting, equations, etc. with code blocks that can be directly run. Here, we're going to practice using Jupyter and use it to learn some basics of Python.
 
@@ -18,6 +16,8 @@ Markdown cells are meant for formatted content, pictures, lecture notes etc. and
 If you want to edit a markdown cell, double left-click it. To finalize the edits, click the checkmark above (or type ctrl-enter).
 
 ## Code runs IN the notebook.
+
+$$E=mc^2$$
 
 Select the python cell below. You can edit it freely. To run it, you can click the triangle button ("play button") to the upper right of that cell. Alternatively, you can ctrl-enter.
 
@@ -46,9 +46,7 @@ print('Rounded: ', simple_summation)
 
 ## Order matters
 
-The second python cell would fail if the first one wasn't run.
-y
-You can run the whole program via the double-play Run icon above.
+The second python cell would fail if the first one wasn't run. y You can run the whole program via the double-play Run icon above.
 
 ## In-class exercise 1.1
 
