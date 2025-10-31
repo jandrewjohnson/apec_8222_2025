@@ -1,23 +1,23 @@
 ---
 title: Overview for today
-jupyter: python3
+jupyter: "env8222a"
+execute:
+  engine: jupyter
 ---
 
-
-- Yesterday, we connected to GitHub and gave a brutally quick introduction to Python.
-- Today we’re going to:
-    - Pickup where we left off
-    - Learn more about Numpy
-    - Learn about spatial data in Python
-    - Do raster-math “at scale”
-    - If there’s time, start into our first Machine Learning model
+-   Yesterday, we connected to GitHub and gave a brutally quick introduction to Python.
+-   Today we’re going to:
+    -   Pickup where we left off
+    -   Learn more about Numpy
+    -   Learn about spatial data in Python
+    -   Do raster-math “at scale”
+    -   If there’s time, start into our first Machine Learning model
 
 # Introduction to big and spatial data
-- Example from recent publication in Ecological Economics
-![](images/lec3_image3.png){width=70% #fig-3_3}
 
-- Combined both econometrics and “big-data array manipulation”
-![](images/lec3_image2.png){width=70% #fig-3_2}
+-   Example from recent publication in Ecological Economics ![](images/lec3_image3.png){#fig-3_3 width="70%"}
+
+-   Combined both econometrics and “big-data array manipulation” ![](images/lec3_image2.png){#fig-3_2 width="70%"}
 
 ## Topics to be covered
 
@@ -50,7 +50,6 @@ jupyter: python3
 # **Basic Rules/Syntax of Python**
 
 # Python is not a "statically typed" language
-
 
 ```{python}
 # Comments: The hashtag makes the rest of the line a comment. The more programming you do, the more you focus on making good comments.
@@ -163,15 +162,15 @@ class ClassName:
 
 Here is a table to guide you through the different data types in Python, since most of you are coming from R.
 
-| Description            | R Data Type       | Python Data Type | Python Example             |
-|--------------------|------------------|------------------|------------------|
-| Integer Numbers        | integer           | int              | `x = 5`                    |
-| Floating-Point Numbers | numeric or double | float            | `y = 5.0`                  |
-| Character Strings      | character         | str              | `z = "hello"`              |
-| Boolean Values         | logical           | bool             | `a = True`                 |
-| Complex Numbers        | complex           | complex          | `b = 3 + 4j`               |
-| Vectors (1D array)     | vector            | list             | `c = [1, 2, 3]`            |
-| Named Vectors          | named vector      | dict             | `d = {"one": 1, "two": 2}` |
+| Description | R Data Type | Python Data Type | Python Example |
+|-------------------|------------------|------------------|------------------|
+| Integer Numbers | integer | int | `x = 5` |
+| Floating-Point Numbers | numeric or double | float | `y = 5.0` |
+| Character Strings | character | str | `z = "hello"` |
+| Boolean Values | logical | bool | `a = True` |
+| Complex Numbers | complex | complex | `b = 3 + 4j` |
+| Vectors (1D array) | vector | list | `c = [1, 2, 3]` |
+| Named Vectors | named vector | dict | `d = {"one": 1, "two": 2}` |
 
 Variables are containers for storing data values. Unlike R, Python does not require declaring the variable type, it gets converted automatically based on the value it holds.
 
@@ -284,19 +283,18 @@ print(type(my_age))  # Output: <class 'int'>
 # Question 2:
 my_info = ["John Doe", 25, True]
 ```
-
 :::
 
 ## Understanding Data Structures in Python
 
 Data structures are a way of organizing and storing data so that they can be accessed and worked with efficiently. Python has built-in data structures like lists, tuples, sets, and dictionaries.
 
-| Description                  | R Data Structure         | Python Data Structure | Python Example               |
-|------------------|------------------|------------------|--------------------|
-| Ordered collection           | List                     | List                  | `my_list = [1, 2, 3]`        |
-| Immutable ordered collection | NA                       | Tuple                 | `my_tuple = (1, 2, 3)`       |
-| Unordered collection         | Set                      | Set                   | `my_set = {1, 2, 3}`         |
-| Key-Value pairs              | Named list or data frame | Dictionary            | `my_dict = {'a': 1, 'b': 2}` |
+| Description | R Data Structure | Python Data Structure | Python Example |
+|------------------|------------------|------------------|-------------------|
+| Ordered collection | List | List | `my_list = [1, 2, 3]` |
+| Immutable ordered collection | NA | Tuple | `my_tuple = (1, 2, 3)` |
+| Unordered collection | Set | Set | `my_set = {1, 2, 3}` |
+| Key-Value pairs | Named list or data frame | Dictionary | `my_dict = {'a': 1, 'b': 2}` |
 
 ### Lists
 
@@ -565,7 +563,6 @@ def find_primes(start, end):
 primes = find_primes(10, 50)
 print(primes)  # Output: [11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47]
 ```
-
 :::
 
 ## Understanding Functions in Python
@@ -638,7 +635,6 @@ def factorial(n):
 
 print(factorial(5))  # Output: 120
 ```
-
 :::
 
 ```{python}
@@ -766,7 +762,6 @@ a = 10
 b = 20
 a, b = b, a  # a becomes 20 and b becomes 10
 ```
-
 :::
 
 **Discussion point**
@@ -842,6 +837,4 @@ print(even_numbers)  # Output: [2, 4, 6, 8, 10, 12, 14, 16, 18, 20]
 squares_dict = {x: x**2 for x in range(1, 6)}
 print(squares_dict)  # Output: {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
 ```
-
 :::
-
