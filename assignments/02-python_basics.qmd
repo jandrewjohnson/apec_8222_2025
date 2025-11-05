@@ -38,7 +38,7 @@ def calculate_area (length, width):
    return area
 
 # Example
-print("The area of rectangle with length 4 and width 3 is:",calculate_area(3,4))
+print("The area of rectangle with length 4 and width 3 is:",calculate_area(4,3))
 ```
 
 c.) **Basic Data Types**: - Create a variable `is_active` and set it to `True`. Print the type of `is_active` using the `type()` function.
@@ -53,7 +53,7 @@ d.) **Working with Lists**: - Create a list named `fruits` containing some fruit
 
 ```{python}
 #1 d) Answer:
-# My favoriate fruits list
+# My favorite fruits list
 fruits = ["Blueberry","Passion fruit","Pomegranate","Kiwi"]
 # Append "Mango" to the list by requirement
 fruits.append("Mango")
@@ -126,7 +126,7 @@ e.) **Functions - Arguments and Return Values**: - Create a function named `get_
 #2 e) Answer:
 def get_full_name(first_name,last_name):
    """ Return the full name string in academic convention 'last_name, firstname'"""
-   return f"{last_name},{first_name}"
+   return f"{last_name}, {first_name}"
 
 # Example
 get_full_name("Zihan","Tang")
@@ -177,8 +177,8 @@ print(*file_list, sep="\n")
 ```{python}
 #3C Answer
 # Using file_list from 3B; print the output in convention 'filename: count'
-for file in file_list:
-   print(f"{file}: {len(file)}")
+for fname in file_list:
+    print(f"{fname}: {len(fname)}")
 ```
 
 **Part D:** Write a Python program which iterates over the integers from 1 to 50. For multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz". Hint: look up how to use the modulo operator (which is written as % in python) which would let you test when the remainder of a devision is exactly 0.
@@ -206,12 +206,13 @@ for i in range(1,51):
 Create a personal website using GitHub Pages. The website should be just a few pages, including a landing page, a research page, and a contact page. Use Markdown to format the content on your pages. Include links to your GitHub profile and any relevant projects or repositories you have worked on. Once completed, share the link to your GitHub Pages website here. Note, for the pages to actually be hosted online, you will need to create a new repository named <your_github_username>.github.io and push your quarto-rendered markdown files there. See GitHub Pages documentation for more details.
 
 
-### Q4 Answer — Personal Website on GitHub Pages
+### Question 4 — Personal Website on GitHub Pages
 
-- **Website:** <https://ZoeTang12.github.io/>
+- **Website (Home):** https://ZoeTang12.github.io/
 - **Pages:** Home / Research / Contact
-- **GitHub profile:** <https://github.com/ZoeTang12>
-- **Site repository:** <https://github.com/ZoeTang12/ZoeTang12.github.io>
+- **GitHub Profile:** https://github.com/ZoeTang12
+- **Site Repository:** https://github.com/ZoeTang12/ZoeTang12.github.io
+
 
 ### Hint 1
 
