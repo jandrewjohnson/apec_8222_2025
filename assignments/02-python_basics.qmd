@@ -1,14 +1,19 @@
-# Assignment 2: Python Basics and GitHub Pages Website
+---
+title: "Assignment 2: Python Basics and GitHub Pages Website"
+format:
+  html:
+    toc: true
+    code-copy: true
+jupyter: env8222a
+---
 
 For this assignment, see the QMD or IPYNB files in our course repository named 02-python_basics.qmd or 02-python_basics.ipynb.
 
 Most things in this can be solved using methods shown in lecture. However, some cases will require you to search the internet for answers.
 
-
 ## Question 1
 
-a). **Indentation and Pythonic Code**:
-   - Create a function named `print_numbers` that prints numbers from 1 to 10, each on a new line. Ensure your code is properly indented and follows Pythonic conventions.
+a). **Indentation and Pythonic Code**: - Create a function named `print_numbers` that prints numbers from 1 to 10, each on a new line. Ensure your code is properly indented and follows Pythonic conventions.
 
 ```{python}
 #1 a) Answer
@@ -23,8 +28,7 @@ def print_numbers():
 print_numbers()
 ```
 
-b.) **Rules of Functions and Comments**:
-   - Define a function named `calculate_area` that takes two arguments `length` and `width`, and returns the area of a rectangle. Include a docstring explaining what the function does. See the lecture notes for an example of a docstring.
+b.) **Rules of Functions and Comments**: - Define a function named `calculate_area` that takes two arguments `length` and `width`, and returns the area of a rectangle. Include a docstring explaining what the function does. See the lecture notes for an example of a docstring.
 
 ```{python}
 #1 b) Answer:
@@ -37,8 +41,7 @@ def calculate_area (length, width):
 print("The area of rectangle with length 4 and width 3 is:",calculate_area(3,4))
 ```
 
-c.) **Basic Data Types**:
-   - Create a variable `is_active` and set it to `True`. Print the type of `is_active` using the `type()` function.
+c.) **Basic Data Types**: - Create a variable `is_active` and set it to `True`. Print the type of `is_active` using the `type()` function.
 
 ```{python}
 #1 c) Answer:
@@ -46,8 +49,7 @@ is_active = True
 print("the type of variable 'is_active' is:", type(is_active))
 ```
 
-d.) **Working with Lists**:
-   - Create a list named `fruits` containing some fruit names. Use the `append` method to add 'Mango' to the list and print the updated list.
+d.) **Working with Lists**: - Create a list named `fruits` containing some fruit names. Use the `append` method to add 'Mango' to the list and print the updated list.
 
 ```{python}
 #1 d) Answer:
@@ -61,8 +63,8 @@ print("The update fruit list is:",fruits)
 ```
 
 ## Question 2:
-a.) **Naming Conventions**:
-   - Create a variable following the snake_case naming convention to store the number of days in a week.
+
+a.) **Naming Conventions**: - Create a variable following the snake_case naming convention to store the number of days in a week.
 
 ```{python}
 #2 a) Answer: 
@@ -71,8 +73,7 @@ days_in_week = 7
 print("There are",days_in_week, "days in a week")
 ```
 
-b.) **Control Flows - Conditionals**:
-   - Write a simple program that checks if a number is positive, negative, or zero using `if`, `elif`, and `else` statements.
+b.) **Control Flows - Conditionals**: - Write a simple program that checks if a number is positive, negative, or zero using `if`, `elif`, and `else` statements.
 
 ```{python}
 #2 b) Answer:
@@ -91,8 +92,7 @@ print("0 is", check_sign(0))
 print("1 is", check_sign(1))
 ```
 
-c.) **Control Flows - Loops**:
-   - Write a `for` loop to calculate the sum of numbers from 1 to 100.
+c.) **Control Flows - Loops**: - Write a `for` loop to calculate the sum of numbers from 1 to 100.
 
 ```{python}
 #2 c) Answer:
@@ -105,8 +105,7 @@ for i in range(1,101):
 print("The sum of numbers from 1 to 100 is:", loop_sum)
 ```
 
-d.) **Control Flows - Loop Control Statements**:
-   - Modify the loop from the previous sub-question to stop the loop if the sum becomes greater than 1000 using a `break` statement.
+d.) **Control Flows - Loop Control Statements**: - Modify the loop from the previous sub-question to stop the loop if the sum becomes greater than 1000 using a `break` statement.
 
 ```{python}
 #2 d) Answer: 
@@ -121,8 +120,7 @@ for i in range(1,101):
 print("The loop sum is break at number", break_number, "with loop sum", loop_sum)
 ```
 
-e.) **Functions - Arguments and Return Values**:
-   - Create a function named `get_full_name` that takes two arguments `first_name` and `last_name`, and returns the full name.
+e.) **Functions - Arguments and Return Values**: - Create a function named `get_full_name` that takes two arguments `first_name` and `last_name`, and returns the full name.
 
 ```{python}
 #2 e) Answer:
@@ -136,15 +134,12 @@ get_full_name("Zihan","Tang")
 ```
 
 ## Question 3
-**Part A:** Write a python function that calculates the sum of all squared 
-numbers from 1 to x. Illustrate that it works for x = 20.
 
-HINT, ** is the exponent operator in python.
-HINT syntax for a python function is:
+**Part A:** Write a python function that calculates the sum of all squared numbers from 1 to x. Illustrate that it works for x = 20.
 
-def function_name(variable_name):
-    outcome = variable_name + 1
-    return outcome
+HINT, \*\* is the exponent operator in python. HINT syntax for a python function is:
+
+def function_name(variable_name): outcome = variable_name + 1 return outcome
 
 ```{python}
 #3A Answer
@@ -161,10 +156,7 @@ def sum_of_squared(x):
 print("The sum of all squared numbers from 1 to 20 is", sum_of_squared(20))
 ```
 
-The python library named "os" is a built-in library for dealing with any file on your operating system.
-Often, research tasks involve LOTS of files and you need to iterate over them. To show you know how
-to do this, use the os.listdir function to answer the following questions. Note that you need to 
-write "import os" to import the library into your code before you can use it:
+The python library named "os" is a built-in library for dealing with any file on your operating system. Often, research tasks involve LOTS of files and you need to iterate over them. To show you know how to do this, use the os.listdir function to answer the following questions. Note that you need to write "import os" to import the library into your code before you can use it:
 
 **Part B:** Print out a list of all the files your class root directory. I don't care how many are actually there (in case you've added some yourself) but show me how.
 
@@ -177,7 +169,7 @@ class_root= "/Users/etoiletang/Dropbox/Mac/Downloads/Apec8222/apec_8222_2025_Zih
 
 # Check the files 
 file_list = sorted(os.listdir(class_root))
-print(file_list)
+print(*file_list, sep="\n") 
 ```
 
 **Part C:** Using a FOR loop, iterate over the list from above. Using the function len(), count how many letters there are in the filenames. HINT just like in real life, you may need to google the len() function and see how it work on e.g. strings.
@@ -213,43 +205,35 @@ for i in range(1,51):
 
 Create a personal website using GitHub Pages. The website should be just a few pages, including a landing page, a research page, and a contact page. Use Markdown to format the content on your pages. Include links to your GitHub profile and any relevant projects or repositories you have worked on. Once completed, share the link to your GitHub Pages website here. Note, for the pages to actually be hosted online, you will need to create a new repository named <your_github_username>.github.io and push your quarto-rendered markdown files there. See GitHub Pages documentation for more details.
 
+
+### Q4 Answer — Personal Website on GitHub Pages
+
+- **Website:** <https://ZoeTang12.github.io/>
+- **Pages:** Home / Research / Contact
+- **GitHub profile:** <https://github.com/ZoeTang12>
+- **Site repository:** <https://github.com/ZoeTang12/ZoeTang12.github.io>
+
 ### Hint 1
 
-Organization and customization of your site will be managed by creating a _quarto.yml in your project root with content like below.
+Organization and customization of your site will be managed by creating a \_quarto.yml in your project root with content like below.
 
-project:
-  type: website
+project: type: website
 
-website:
-  title: "Your Name"
-  navbar:
-    right:
-      - text: "Home"
-        href: index.qmd
-      - about.qmd
-      - projects.qmd
-      - contact.qmd
+website: title: "Your Name" navbar: right: - text: "Home" href: index.qmd - about.qmd - projects.qmd - contact.qmd
 
-
-format:
-  html:
-    theme: cosmo
-    toc: true
-    code-copy: true
-
+format: html: theme: cosmo toc: true code-copy: true
 
 ### Hint 2
 
-Individual pages could be written as, for example, a index.qmd with the following content. 
+Individual pages could be written as, for example, a index.qmd with the following content.
 
 # Hello, I’m Your Name
 
 Short tagline (e.g., *Applied Economist • Data Scientist*).
 
-- I study ...
-- I teach ...
-- I build ...
-
+-   I study ...
+-   I teach ...
+-   I build ...
 
 ### Hint 3
 
@@ -260,6 +244,3 @@ Call quarto render on the command line in your project root to build the site an
 To actually host the site, push the rendered HTML files to a GitHub repository named <your_github_username>.github.io. Follow GitHub Pages documentation for details on setting up the repository and enabling GitHub Pages.
 
 Ideally, this should be a public site. However if you would like to remain anonymous, you can just create a private repository and invite me as a collaborator on the repository.
-
-
-
