@@ -12,6 +12,15 @@ a). **Indentation and Pythonic Code**:
 
 ```{python}
 #1 a) Answer
+# Print 1-10 (one per line)
+def print_numbers():
+   """Print the integers 1 through 10, one per line."""
+   for i in range(1, 11):
+      print(i)
+
+
+# Display
+print_numbers()
 ```
 
 b.) **Rules of Functions and Comments**:
@@ -19,6 +28,13 @@ b.) **Rules of Functions and Comments**:
 
 ```{python}
 #1 b) Answer:
+def calculate_area (length, width):
+   """Return the area of a rectangle given its length and width."""
+   area = length * width
+   return area
+
+# Example
+print("The area of rectangle with length 4 and width 3 is:",calculate_area(3,4))
 ```
 
 c.) **Basic Data Types**:
@@ -26,6 +42,8 @@ c.) **Basic Data Types**:
 
 ```{python}
 #1 c) Answer:
+is_active = True
+print("the type of variable 'is_active' is:", type(is_active))
 ```
 
 d.) **Working with Lists**:
@@ -33,6 +51,13 @@ d.) **Working with Lists**:
 
 ```{python}
 #1 d) Answer:
+# My favoriate fruits list
+fruits = ["Blueberry","Passion fruit","Pomegranate","Kiwi"]
+# Append "Mango" to the list by requirement
+fruits.append("Mango")
+
+# Display
+print("The update fruit list is:",fruits)
 ```
 
 ## Question 2:
@@ -41,6 +66,9 @@ a.) **Naming Conventions**:
 
 ```{python}
 #2 a) Answer: 
+days_in_week = 7
+# Display
+print("There are",days_in_week, "days in a week")
 ```
 
 b.) **Control Flows - Conditionals**:
@@ -48,6 +76,19 @@ b.) **Control Flows - Conditionals**:
 
 ```{python}
 #2 b) Answer:
+def check_sign (number):
+   """ Check the sign of number"""
+   if number > 0:
+      return "Positive"
+   elif number < 0:
+      return "Negative"
+   else:
+      return "Zero"
+
+# Examples:
+print("-1 is", check_sign(-1))
+print("0 is", check_sign(0))
+print("1 is", check_sign(1))
 ```
 
 c.) **Control Flows - Loops**:
@@ -55,13 +96,29 @@ c.) **Control Flows - Loops**:
 
 ```{python}
 #2 c) Answer:
+# Initial Setting
+loop_sum = 0
+# Calculate sum of integers from 1 to 100
+for i in range(1,101):
+   loop_sum += i
+
+print("The sum of numbers from 1 to 100 is:", loop_sum)
 ```
 
 d.) **Control Flows - Loop Control Statements**:
    - Modify the loop from the previous sub-question to stop the loop if the sum becomes greater than 1000 using a `break` statement.
 
 ```{python}
-#2 c) Answer: 
+#2 d) Answer: 
+# Initial Setting
+loop_sum = 0
+for i in range(1,101):
+   loop_sum += i
+   if loop_sum > 1000:
+      # return the number at which the total sum exceeds 1000 when the loop reaches it.
+      break_number = i
+      break
+print("The loop sum is break at number", break_number, "with loop sum", loop_sum)
 ```
 
 e.) **Functions - Arguments and Return Values**:
@@ -69,6 +126,13 @@ e.) **Functions - Arguments and Return Values**:
 
 ```{python}
 #2 e) Answer:
+def get_full_name(first_name,last_name):
+   """ Return the full name string in academic convention 'last_name, firstname'"""
+   return f"{last_name},{first_name}"
+
+# Example
+get_full_name("Zihan","Tang")
+
 ```
 
 ## Question 3
@@ -84,6 +148,17 @@ def function_name(variable_name):
 
 ```{python}
 #3A Answer
+def sum_of_squared(x):
+   """ calculates the sum of squared numbers from 1 to x"""
+   # initial setting
+   squared_sum = 0
+   # Use 'for' loop to calculate the sum
+   for i in range (1,x+1):
+      squared_sum += i*i
+   return squared_sum
+
+# Example of x=20
+print("The sum of all squared numbers from 1 to 20 is", sum_of_squared(20))
 ```
 
 The python library named "os" is a built-in library for dealing with any file on your operating system.
@@ -95,12 +170,23 @@ write "import os" to import the library into your code before you can use it:
 
 ```{python}
 #3B Answer
+# import required library
+import os
+# My class root directory
+class_root= "/Users/etoiletang/Dropbox/Mac/Downloads/Apec8222/apec_8222_2025_Zihan"
+
+# Check the files 
+file_list = sorted(os.listdir(class_root))
+print(file_list)
 ```
 
 **Part C:** Using a FOR loop, iterate over the list from above. Using the function len(), count how many letters there are in the filenames. HINT just like in real life, you may need to google the len() function and see how it work on e.g. strings.
 
 ```{python}
 #3C Answer
+# Using file_list from 3B; print the output in convention 'filename: count'
+for file in file_list:
+   print(f"{file}: {len(file)}")
 ```
 
 **Part D:** Write a Python program which iterates over the integers from 1 to 50. For multiples of three print "Fizz" instead of the number and for the multiples of five print "Buzz". For numbers which are multiples of both three and five print "FizzBuzz". Hint: look up how to use the modulo operator (which is written as % in python) which would let you test when the remainder of a devision is exactly 0.
@@ -109,6 +195,18 @@ Side-note, this is a hilariously over-used question that most software engineers
 
 ```{python}
 # 3D Answer
+for i in range(1,51):
+   # Check multiples of both 3 and 5
+   if i % 15 == 0:
+      print("FizzBuzz")
+   # Check multiples of 5
+   elif i % 5 == 0:
+      print("Buzz")
+   # Check multiples of 3
+   elif i % 3 == 0:
+      print("Fizz")
+   else:
+      print(i)
 ```
 
 ## Question 4
