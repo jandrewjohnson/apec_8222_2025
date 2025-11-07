@@ -208,10 +208,10 @@ Create a personal website using GitHub Pages. The website should be just a few p
 
 ### Question 4 — Personal Website on GitHub Pages
 
-- **Website (Home):** https://ZoeTang12.github.io/
+- **Website (Home):** <https://ZoeTang12.github.io/>
 - **Pages:** Home / Research / Contact
-- **GitHub Profile:** https://github.com/ZoeTang12
-- **Site Repository:** https://github.com/ZoeTang12/ZoeTang12.github.io
+- **GitHub Profile:** <https://github.com/ZoeTang12>
+- **Site Repository:** <https://github.com/ZoeTang12/ZoeTang12.github.io>
 
 
 ### Hint 1
