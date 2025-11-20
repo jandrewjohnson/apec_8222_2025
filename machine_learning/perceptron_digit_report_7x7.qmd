@@ -1,0 +1,231 @@
+---
+title: "Perceptron for 7x7 Digit Recognition"
+author: "Automated Report via Python Script"
+date: "2025-11-19"
+format:
+  html:
+    toc: true
+    code-fold: true
+    self-contained: true
+jupyter: python3
+---
+
+## Introduction
+This report demonstrates the use of a Perceptron-based system for recognizing 7x7 binary pixel digits (49 features). A One-vs-Rest (OvR) strategy is employed, training ten Perceptrons. Each Perceptron learns to distinguish one specific digit.
+The Perceptron is a linear classifier. Key components:
+
+- Input Features: Flattened 7x7 pixel values.
+  
+- Weights and Bias: Learned parameters.
+  
+- Net Input: Weighted sum of inputs + bias.
+  
+- Activation Function: Step function (0 or 1).
+  
+- Learning Rule: Iterative weight/bias adjustment.
+
+## Dataset: 7x7 Digit Patterns
+Base dataset: "perfect" 7x7 patterns for digits 0-9. Training uses these augmented with noisy versions (randomly flipped pixels).
+Example of a perfect digit (Digit 0 if available, else first):
+![Perfect Digit Example](perceptron_digit_visualizations_7x7/perfect_input_true0_pred0_idx0.png)
+
+## One-vs-Rest (OvR) Perceptron Model
+OvR trains N binary classifiers for N classes (N=10). Perceptron `k` outputs '1' for digit `k`, '0' otherwise. Prediction: highest raw score (net input) from the 10 Perceptrons.
+
+### Conceptual Network Schematic
+![Conceptual Network Diagram](perceptron_digit_visualizations_7x7/overall_network_schematic_7x7.png)
+
+## Training the Perceptrons
+
+The perceptron algorithm starts by initializing all weights to zero or small random values, then repeatedly goes through each training example, calculates the predicted output by taking the weighted sum of inputs plus a bias, and compares this prediction to the actual label. If the prediction matches the label, the weights are left unchanged, but if the prediction is incorrect, the algorithm updates the weights and bias by adding the input vector (scaled by the learning rate and true label) to the weights and adjusting the bias similarly. This process continues, cycling through the data, until all points are correctly classified or a maximum number of passes through the data is reached.
+
+Each Perceptron is trained independently. Visualized weights show important pixels for its target digit (Red: positive, Blue: negative).
+
+More formally: 
+
+1. Initialization:
+n_samples, n_features_data = X.shape: Determines the number of training examples and the number of features per example.
+self.weights_ = np.zeros(n_features_data): The weights are initialized. Each feature in your input data (e.g., each of the 49 pixels for a 7x7 digit) will have a corresponding weight. Starting with zeros is a common and simple approach, meaning initially, the Perceptron has no preference for any feature. (Alternatively, small random values could be used).
+self.bias_ = 0.0: The bias term is initialized to zero. The bias acts like an intercept in a linear equation; it shifts the decision boundary without depending on the input values.
+self.errors_ = []: An empty list is created to store the number of misclassifications (errors) made in each epoch. This is useful for monitoring the learning process.
+2. Iterative Learning over Epochs:
+for epoch in range(self.n_iters):: The algorithm iterates through the entire training dataset multiple times. Each complete pass through the training dataset is called an epoch. self.n_iters defines the maximum number of epochs.
+errors_in_epoch = 0: At the start of each epoch, a counter for misclassifications in that epoch is reset.
+3. Iterating Through Each Training Sample (Online Learning):
+for i in range(n_samples):: Within each epoch, the algorithm processes each training sample one by one.
+xi = X[i]: The current training sample's features (e.g., the 49 pixel values for one digit).
+target = y[i]: The true class label (0 or 1) for the current training sample xi.
+4. Making a Prediction for the Current Sample:
+a. Calculate Net Input (Weighted Sum + Bias):
+net_input_for_xi = self._net_input(xi)
+This internally calls np.dot(xi, self.weights_) + self.bias_.
+This is the linear combination of the input features and their corresponding weights, plus the bias. It's a raw score.
+z = (w1*x1 + w2*x2 + ... + wn*xn) + b
+b. Apply Activation Function:
+prediction_activated = self._activation_function(net_input_for_xi)
+This internally calls np.where(net_input_for_xi >= 0, 1, 0).
+This is a step function. If the net_input_for_xi is greater than or equal to 0, the Perceptron predicts class 1; otherwise, it predicts class 0. This is the Perceptron's actual outputted class label for xi.
+5. Calculating the Update Value (Perceptron Learning Rule Core):
+update_val = target - prediction_activated: This calculates the error for the current sample.
+* If prediction_activated == target (correct classification): update_val will be 0.
+* If target = 1 and prediction_activated = 0 (false negative): update_val will be 1 - 0 = 1.
+* If target = 0 and prediction_activated = 1 (false positive): update_val will be 0 - 1 = -1.
+update = self.learning_rate * update_val:
+* self.learning_rate (eta, η): This is a small positive constant (e.g., 0.1, 0.01) that controls the magnitude of the weight and bias adjustments. A smaller learning rate leads to smaller adjustments and potentially slower but more stable convergence. A larger learning rate can lead to faster learning but might overshoot the optimal solution or become unstable.
+* The update variable now holds the scaled error. It will be 0 for correct classifications, positive if the prediction should have been 1 but was 0, and negative if the prediction should have been 0 but was 1.
+6. Updating Weights and Bias (if Misclassification Occurred):
+if update != 0:: The weights and bias are only adjusted if the Perceptron made a mistake on the current sample (update_val was not 0).
+a. Update Weights:
+self.weights_ += update * xi
+This is the core weight update rule. Let's break it down:
+* If update is positive (false negative, wanted 1, got 0): self.weights_ will have learning_rate * 1 * xi added to it. For each feature j in xi that was active (e.g., xi[j] == 1), its corresponding weight self.weights_[j] will be increased. This makes it more likely that the net_input will be positive (and thus predict 1) for this sample (or similar samples) in the future.
+* If update is negative (false positive, wanted 0, got 1): self.weights_ will have learning_rate * (-1) * xi added to it (i.e., subtracted). For each feature j in xi that was active, self.weights_[j] will be decreased. This makes it more likely that the net_input will be negative (and thus predict 0) for this sample in the future.
+* If a feature xi[j] is 0, its corresponding weight self.weights_[j] is not changed by this part of the update, as update * 0 = 0.
+b. Update Bias:
+self.bias_ += update
+* If update is positive (false negative): The bias is increased. Increasing the bias makes it easier for the net_input (weighted sum + bias) to cross the 0 threshold, thus making a prediction of 1 more likely.
+* If update is negative (false positive): The bias is decreased, making a prediction of 1 less likely.
+errors_in_epoch += 1: Increment the count of misclassifications for the current epoch.
+7. Storing Epoch Errors and Checking for Convergence:
+After iterating through all samples in an epoch:
+self.errors_.append(errors_in_epoch): The total number of misclassifications in that epoch is stored.
+if errors_in_epoch == 0 and epoch > 0::
+This is an early stopping condition. If an entire epoch completes with zero misclassifications (and it's not the very first epoch which might start with zero errors if weights are initialized to zero and the first sample target is 0), it means the Perceptron has found a set of weights and bias that perfectly separates the training data. The algorithm can then stop, as further iterations won't change the weights.
+8. Loop Continuation/Termination:
+If convergence is not met and the number of epochs is less than self.n_iters, the algorithm goes back to step 2 for the next epoch.
+If self.n_iters is reached, the algorithm stops, even if the data isn't perfectly separated (this happens if the data is not linearly separable or if n_iters is too small).
+
+
+
+### Learned Perceptron Weights
+
+#### Perceptron for Digit 0
+![Weights for Digit 0](perceptron_digit_visualizations_7x7/weights_digit_0.png)
+*Weights for Perceptron 0 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 1
+![Weights for Digit 1](perceptron_digit_visualizations_7x7/weights_digit_1.png)
+*Weights for Perceptron 1 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 2
+![Weights for Digit 2](perceptron_digit_visualizations_7x7/weights_digit_2.png)
+*Weights for Perceptron 2 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 3
+![Weights for Digit 3](perceptron_digit_visualizations_7x7/weights_digit_3.png)
+*Weights for Perceptron 3 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 4
+![Weights for Digit 4](perceptron_digit_visualizations_7x7/weights_digit_4.png)
+*Weights for Perceptron 4 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 5
+![Weights for Digit 5](perceptron_digit_visualizations_7x7/weights_digit_5.png)
+*Weights for Perceptron 5 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 6
+![Weights for Digit 6](perceptron_digit_visualizations_7x7/weights_digit_6.png)
+*Weights for Perceptron 6 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 7
+![Weights for Digit 7](perceptron_digit_visualizations_7x7/weights_digit_7.png)
+*Weights for Perceptron 7 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 8
+![Weights for Digit 8](perceptron_digit_visualizations_7x7/weights_digit_8.png)
+*Weights for Perceptron 8 (49 values reshaped to 7x7). Bias noted in title.*
+
+#### Perceptron for Digit 9
+![Weights for Digit 9](perceptron_digit_visualizations_7x7/weights_digit_9.png)
+*Weights for Perceptron 9 (49 values reshaped to 7x7). Bias noted in title.*
+
+## Testing and Results
+Model tested on "perfect" patterns and new "noisy" patterns.
+
+### Accuracy
+- **Accuracy on Perfect Patterns:** 100.00%
+- **Accuracy on New Noisy Patterns:** 100.00%
+
+### Examples of Predictions
+Input digit image, then bar chart of scores from 10 Perceptrons. Highest score = prediction.
+
+#### Predictions on Perfect Patterns (showing first 3)
+
+##### Test Case: Perfect Digit (True: 0, Predicted: 0)
+Input Digit:
+![Input Perfect 0](perceptron_digit_visualizations_7x7/perfect_input_true0_pred0_idx0.png)
+Decision Process:
+![Decision Perfect 0](perceptron_digit_visualizations_7x7/decision_perfect_idx0_true0_pred0.png)
+*Scores: 0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00*
+---
+
+##### Test Case: Perfect Digit (True: 1, Predicted: 1)
+Input Digit:
+![Input Perfect 1](perceptron_digit_visualizations_7x7/perfect_input_true1_pred1_idx1.png)
+Decision Process:
+![Decision Perfect 1](perceptron_digit_visualizations_7x7/decision_perfect_idx1_true1_pred1.png)
+*Scores: -0.00, 0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00*
+---
+
+##### Test Case: Perfect Digit (True: 2, Predicted: 2)
+Input Digit:
+![Input Perfect 2](perceptron_digit_visualizations_7x7/perfect_input_true2_pred2_idx2.png)
+Decision Process:
+![Decision Perfect 2](perceptron_digit_visualizations_7x7/decision_perfect_idx2_true2_pred2.png)
+*Scores: -0.00, -0.00, 0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00*
+---
+
+#### Predictions on Noisy Patterns (showing first 3)
+
+##### Test Case: Noisy Digit (True: 8, Predicted: 8)
+Input Digit:
+![Input Noisy 8](perceptron_digit_visualizations_7x7/noisy_input_true8_pred8_idx0.png)
+Decision Process:
+![Decision Noisy 8](perceptron_digit_visualizations_7x7/decision_noisy_idx0_true8_pred8.png)
+*Scores: -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, 0.00, -0.00*
+---
+
+##### Test Case: Noisy Digit (True: 5, Predicted: 5)
+Input Digit:
+![Input Noisy 5](perceptron_digit_visualizations_7x7/noisy_input_true5_pred5_idx1.png)
+Decision Process:
+![Decision Noisy 5](perceptron_digit_visualizations_7x7/decision_noisy_idx1_true5_pred5.png)
+*Scores: -0.00, -0.00, -0.00, -0.00, -0.00, 0.00, -0.00, -0.00, -0.00, -0.00*
+---
+
+##### Test Case: Noisy Digit (True: 7, Predicted: 7)
+Input Digit:
+![Input Noisy 7](perceptron_digit_visualizations_7x7/noisy_input_true7_pred7_idx2.png)
+Decision Process:
+![Decision Noisy 7](perceptron_digit_visualizations_7x7/decision_noisy_idx2_true7_pred7.png)
+*Scores: -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, -0.00, 0.00, -0.00, -0.00*
+---
+
+## Conclusion
+OvR Perceptrons can classify {GRID_SIZE}x{GRID_SIZE} digits. Performance depends on pattern distinctiveness, noise, learning rate, and iterations. This demonstrates foundational concepts. More complex problems need advanced models. Visualizations offer insight into learning and decision-making.
+
+It's Not Just Looking For the Digit, but Also Against Others (One-vs-Rest):
+Remember, the Perceptron for Digit 0 is trained to distinguish "0" (target = 1) from all other digits (target = 0 for digits 1 through 9).
+So, the weights are not just learning "what makes a 0 a 0," but also "what makes a 0 not a 1, not a 2, not a 3, etc."
+Positive Weights (Red in your RdBu colormap): These pixels, if "on" (value 1) in an input image, push the Perceptron's net input towards classifying the image as a "0". They are features that are strongly indicative of a "0" and/or features that are typically absent in other digits when a "0" is present.
+Negative Weights (Blue): These pixels, if "on," push the net input away from classifying it as a "0" (i.e., towards classifying it as "not a 0"). These are features that might be common in other digits but not in a "0", or features whose presence actively contradicts the pattern of a "0".
+Near-Zero Weights (White/Light Colors): These pixels don't contribute much to the decision for this specific Perceptron. They might be pixels that are commonly on or off across many digits, or just aren't very discriminative for telling a "0" apart from the rest.
+
+Discriminative Features, Not Perfect Templates:
+The Perceptron isn't trying to learn a pixel-perfect template of a "0" that it then matches. Instead, it's learning the most discriminative features.
+For example, if the central hole of a "0" is a very strong feature that most other digits don't have, pixels forming that hole might get strong positive weights.
+Conversely, if a vertical bar on the far right is very common in a "1" or "7" but never in your "0", those pixels might get strong negative weights for the "0" Perceptron. The presence of these would strongly suggest it's not a "0".
+
+Influence of Other Digits' Shapes:
+Let's look at your specific "Weights for Digit 0" image:
+You see some strong reddish (positive) weights that seem to roughly outline parts of a "0". This makes sense.
+You also see some strong bluish (negative) weights. These might correspond to areas that are typically "on" for other digits but should be "off" for a "0". For instance, if your "1" pattern has a strong central vertical line, the "0" Perceptron might learn negative weights in that central column to "penalize" inputs that look like a "1".
+The dark maroon/red spot in the middle of your example image might indicate a pixel that is very reliably "off" in the training examples of 0s, and perhaps "on" in many non-0 digits, thus its absence (being "off" in the input and multiplied by a positive weight, or "on" in the input and multiplied by a negative weight if the colors were reversed for what "on" is) contributes to classifying as a "0".
+In your specific image: The dark red patch in the middle left-ish area seems to get a strong positive weight. This means if that pixel is ON, it strongly suggests the digit is a 0. The dark blue patches on the right and left edges (middle rows) have strong negative weights. If these pixels are ON, it strongly suggests the digit is NOT a 0. This could be because digits like '8' or '4' might have pixels active there.
+The Bias Term:
+The bias term (e.g., "Bias: -0.04" in your image) acts as a general threshold. If the bias is negative, the weighted sum of inputs needs to be even more positive to cross the decision boundary (0) and be classified as a "0". This means the Perceptron is, by default, slightly biased against classifying something as a "0" unless the pixel evidence is strong enough.
+Linear Separability and "Good Enough":
+A Perceptron finds a linear separating hyperplane. It doesn't necessarily find the "prettiest" or most human-interpretable one. As long as the weighted sum w · x + b correctly pushes "0"s above the threshold and "not 0"s below it for most training examples, the learning algorithm is satisfied for that Perceptron.
+The resulting weights are a consequence of the iterative learning process trying to correct misclassifications based on the specific training data (including the noisy examples).
+
+
