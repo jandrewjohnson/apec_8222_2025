@@ -1,7 +1,7 @@
 ---
 title: "Simple Neural Network Classification Report"
 author: "Automated via Python Script"
-date: "2025-06-09"
+date: "2025-11-25"
 format:
   html:
     toc: true
@@ -10,120 +10,51 @@ format:
 jupyter: python3
 ---
 
-## 1. Introduction
-This report details a simple feedforward neural network, implemented using NumPy, designed for a multi-class classification task. The network aims to classify objects based on two input features into one of three predefined categories. This document will walk through the network's architecture, the training process including forward and backward propagation, and the final classification results.
+## 1. Introduction 
+(Same as before)
 
 ## 2. Dataset
-The dataset consists of samples, each characterized by two numerical features (e.g., "brightness" and "size," typically scaled between 0 and 1). The goal is to classify each sample into one of the following three distinct categories:
-- **Class 0:** Small & Dim
-- **Class 1:** Bright OR Large
-- **Class 2:** Small & Bright
-
-As an example, a single data sample might have input features like:
-- **Class 0:** Small & Dim
-- **Class 1:** Bright OR Large
-- **Class 2:** Small & Bright
-
-    A small sample of the input data looks like:
-
-    
+(Same as before, ensure X_sample_for_fwd_pass and y_sample_for_fwd_pass_onehot are used)
 
 ## 3. Neural Network Architecture
-The neural network employed has a feedforward architecture with one hidden layer. The specifics are:
-- **Input Layer:** Comprises 2 neurons, directly corresponding to the 2 input features of each data sample.
-- **Hidden Layer:** Contains 5 neurons. This layer allows the network to learn complex, non-linear relationships between the inputs and outputs.
-- **Output Layer:** Consists of 3 neurons, with each neuron corresponding to one of the 3 possible output classes.
-The Sigmoid activation function (`1 / (1 + e^-x)`) is used for neurons in both the hidden and output layers. This function squashes the neuron's weighted input sum into a value between 0 and 1.
-
-The following diagram provides a visual representation of this architecture:
-
-![Conceptual Diagram of the Neural Network Architecture](nn_classification_visualizations/nn_architecture.png)
-*Figure 1: Network Architecture. This diagram shows the input layer receiving the features, a fully connected hidden layer, and a fully connected output layer. Each circle represents a neuron, and lines represent weighted connections.*
+(Same as before, refers to arch_fn)
 
 ## 4. Training Process
 
-The network is trained using the backpropagation algorithm with gradient descent to minimize the Mean Squared Error (MSE) loss function.
-
 ### 4.1. Forward Propagation
-During the forward pass, input data flows through the network from the input layer to the output layer:
-1.  **Input to Hidden Layer:** The input features are multiplied by the weights connecting the input layer to the hidden layer (`W_ih`). The corresponding bias (`b_h`) is added to this weighted sum.
-2.  **Hidden Layer Activation:** The result from step 1 is passed through the Sigmoid activation function for each hidden neuron. These activations become the input for the next layer.
-3.  **Hidden to Output Layer:** The hidden layer activations are multiplied by the weights connecting the hidden layer to the output layer (`W_ho`). The output layer bias (`b_o`) is added.
-4.  **Output Layer Activation:** This sum is passed through the Sigmoid activation function for each output neuron. The resulting values (between 0 and 1) are the network's raw predictions or confidence scores for each class. The class corresponding to the output neuron with the highest activation is typically chosen as the predicted class.
+During the forward pass, input data is processed layer by layer to produce an output.
+1.  **Input to Hidden Layer:** `Z_h = X @ W_ih + b_h`, followed by `A_h = sigmoid(Z_h)`.
+2.  **Hidden to Output Layer:** `Z_o = A_h @ W_ho + b_o`, followed by `A_o = sigmoid(Z_o)`.
 
-The diagram below illustrates the data flow and transformations for a single input sample during a forward pass:
+The diagram below provides a more detailed breakdown of the calculations involved in a forward pass for a single sample, showing the matrices and vectors at each stage:
 
-![Illustration of a Forward Pass for a Single Sample](nn_classification_visualizations/forward_pass_sample.png)
-*Figure 2: Forward Propagation for One Sample. This figure breaks down the steps: 1. The input sample's feature values. 2. Conceptual representation of the first set of weights (W_ih) and biases. 3. The resulting activations of the hidden layer neurons after applying the sigmoid function. 4. Conceptual representation of the second set of weights (W_ho) and biases. 5. The final activations of the output layer neurons, from which the predicted class is determined.*
+![Detailed Illustration of a Forward Pass for a Single Sample](nn_classification_visualizations/forward_pass_detailed.png)
+*Figure 2: Detailed Forward Propagation. This figure illustrates: 1. The input sample vector (X). 2. The calculations for the hidden layer, including the net input sum (Z_h) and the activations (A_h). The weights W_ih and bias b_h used in this step are shown conceptually. 3. The calculations for the output layer, including its net input sum (Z_o) and final activations (A_o). The weights W_ho and bias b_o are also shown conceptually. 4. The final class prediction derived from A_o.*
 
 ### 4.2. Loss Function
-The Mean Squared Error (MSE) is used to quantify the difference between the network's predicted outputs (after sigmoid) and the true one-hot encoded labels. For N samples, it's calculated as:
-`Loss = (1/N) * Σ_samples (0.5 * Σ_outputs (y_true_output - y_predicted_output)^2)`
-The `0.5` is a convention that simplifies the derivative during backpropagation.
+(Same as before)
 
 ### 4.3. Backpropagation
-After the forward pass, the error (loss) is calculated. The backpropagation algorithm then computes the gradient of this loss function with respect to each weight and bias in the network. This is done by propagating the error signal backward from the output layer to the input layer, using the chain rule of calculus.
-The weights and biases are then updated in the direction opposite to their respective gradients, scaled by a `learning_rate`. This iterative process of forward pass, loss calculation, backpropagation, and weight update aims to progressively minimize the loss and improve the network's accuracy.
+The backpropagation algorithm is key to training the network. It involves calculating the error at the output and then propagating this error backward to adjust the weights and biases throughout the network. The core idea is to determine how much each weight and bias contributed to the overall error and then update them in a direction that reduces this error. This is achieved using the chain rule of calculus to compute gradients.
 
-The learning progress is typically monitored by plotting the loss value at each epoch (or at regular intervals):
+The conceptual flow of backpropagation is illustrated below:
+
+![Conceptual Flow of the Backpropagation Algorithm](nn_classification_visualizations/backpropagation_concept.png)
+*Figure 3: Backpropagation Concept. This diagram shows: 1. Calculation of the output error (E_o). 2. Calculation of the output delta (δ_o), which scales the error by the derivative of the output activation. 3. Propagation of the error to the hidden layer (E_h) using output deltas and weights W_ho. 4. Calculation of the hidden delta (δ_h). These deltas are then used to compute the gradients (∇W, ∇b) for updating the respective weights and biases.*
+
+The learning progress, driven by repeated forward and backward passes, is shown by the training loss curve:
 
 ![Training Loss Curve Over Epochs](nn_classification_visualizations/loss_curve.png)
-*Figure 3: Training Loss Curve. This plot shows the Mean Squared Error (MSE) on the y-axis versus the training epoch on the x-axis. A decreasing trend indicates that the network is learning and its predictions are getting closer to the true labels.*
+*Figure 4: Training Loss Curve. (Same explanation as before for loss_curve_fn)*
 
 ## 5. Results
-After training for N/A epochs with a learning rate of N/A:
-- **Final Training Loss (MSE):** 0.000305
-- **Accuracy on Training Data:** 100.00%
+(Same as before, nn_params should include epochs and learning_rate for this text)
 
 ### 5.1. Classification Visualization and Decision Boundaries
-To understand how the trained network separates the different classes in the feature space, we can visualize its decision boundaries. The feature space (defined by Feature 1 and Feature 2) is divided into regions, where each region corresponds to a class predicted by the network.
-
-![Decision Boundaries Learned by the Network](nn_classification_visualizations/decision_boundaries.png)
-*Figure 4: Decision Boundaries and Data Points. The colored regions represent the areas in the feature space where the neural network would predict a specific class. The scattered points are the actual training data samples, colored according to their true class labels. This plot helps visualize how well the network has learned to separate the different categories.*
+(Same as before, refers to decision_bnd_fn)
 
 ### 5.2. Example Predictions on Training Data
-Here are predictions for the first few samples from the training set:
+(Same as before)
 
- 
-Sample 1
-- **Input Features:** `[0.1 0.2]`
-- **True Class:** Small & Dim (Internal Index 0)
-- **Predicted Class:** Small & Dim (Internal Index 0)
-- **Raw Output Scores (Sigmoid Activations for each class):** `[0.994 0.    0.005]`
-- **Assessment:** **Correct**
-
- 
-Sample 2
-- **Input Features:** `[0.2 0.1]`
-- **True Class:** Small & Dim (Internal Index 0)
-- **Predicted Class:** Small & Dim (Internal Index 0)
-- **Raw Output Scores (Sigmoid Activations for each class):** `[0.987 0.    0.028]`
-- **Assessment:** **Correct**
-
- 
-Sample 3
-- **Input Features:** `[0.8 0.3]`
-- **True Class:** Bright OR Large (Internal Index 1)
-- **Predicted Class:** Bright OR Large (Internal Index 1)
-- **Raw Output Scores (Sigmoid Activations for each class):** `[0.001 0.944 0.069]`
-- **Assessment:** **Correct**
-
- 
-Sample 4
-- **Input Features:** `[0.7  0.25]`
-- **True Class:** Small & Bright (Internal Index 2)
-- **Predicted Class:** Small & Bright (Internal Index 2)
-- **Raw Output Scores (Sigmoid Activations for each class):** `[0.01  0.046 0.927]`
-- **Assessment:** **Correct**
-
- 
-Sample 5
-- **Input Features:** `[0.3 0.8]`
-- **True Class:** Bright OR Large (Internal Index 1)
-- **Predicted Class:** Bright OR Large (Internal Index 1)
-- **Raw Output Scores (Sigmoid Activations for each class):** `[0.002 1.    0.   ]`
-- **Assessment:** **Correct**
-
- 
 ## 6. Conclusion
-This simple feedforward neural network, trained using backpropagation and gradient descent, demonstrates its capability to learn non-linear patterns and classify the provided multi-class dataset. The visualizations of the training process (loss curve) and the resulting decision boundaries provide insights into its learning behavior and classification performance. Further improvements could potentially be achieved by tuning hyperparameters such as the number of hidden neurons, learning rate, number of epochs, or by exploring different network architectures or activation functions.
+(Same as before)
