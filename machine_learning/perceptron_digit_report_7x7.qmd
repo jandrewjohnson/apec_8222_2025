@@ -1,7 +1,7 @@
 ---
 title: "Perceptron for 7x7 Digit Recognition"
 author: "Automated Report via Python Script"
-date: "2025-11-19"
+date: "2025-11-20"
 format:
   html:
     toc: true
@@ -13,15 +13,10 @@ jupyter: python3
 ## Introduction
 This report demonstrates the use of a Perceptron-based system for recognizing 7x7 binary pixel digits (49 features). A One-vs-Rest (OvR) strategy is employed, training ten Perceptrons. Each Perceptron learns to distinguish one specific digit.
 The Perceptron is a linear classifier. Key components:
-
 - Input Features: Flattened 7x7 pixel values.
-  
 - Weights and Bias: Learned parameters.
-  
 - Net Input: Weighted sum of inputs + bias.
-  
 - Activation Function: Step function (0 or 1).
-  
 - Learning Rule: Iterative weight/bias adjustment.
 
 ## Dataset: 7x7 Digit Patterns
