@@ -1,0 +1,136 @@
+---
+title: "Integrating Machine Learning into Causal Inference"
+subtitle: "Beyond Prediction: Tools for High-Dimensional Econometrics"
+author: "Based on: Arif, S. (2025)"
+format:
+  revealjs:
+    theme: simple
+    slide-number: true
+    transition: slide
+    center: true
+    width: 1600
+    height: 900
+---
+
+## The Econometric Problem: Functional Form & Dimensionality
+
+**The Limitation of OLS**
+
+- Standard identification (e.g., CIA/Selection on Observables) requires conditioning on confounders $Z$.
+- **The Challenge:** In high-dimensional datasets ($N < P$), the relationship between $Z$ and Outcome $Y$ is often complex or non-linear.
+- **Risk:** Manual specification search ("p-hacking") or omitted variable bias.
+
+**The ML Opportunity**
+
+- **Prediction vs. Inference:** Standard ML minimizes MSE for $\hat{Y}$ but is biased for parameter estimation ($\beta$).
+- **Causal ML:** Uses ML to learn "nuisance functions" (controls) flexibly, allowing for unbiased inference of the structural parameter.
+
+::: {.notes}
+As economists, we are comfortable with identification strategies. However, we often assume linear separability in our controls. Causal ML allows us to relax the assumption of functional form for control variables, using algorithms to handle the "nuisance" variation.
+:::
+
+## Identification remains "King"
+
+**Algorithms $\neq$ Identification**
+
+- No algorithm can correct for fundamental endogeneity (e.g., unobserved confounders) without a valid strategy (IV, DAGs, etc.).
+
+**The Workflow**
+
+1.  **Structural Model:** Define the causal graph (DAG) or Potential Outcomes framework.
+2.  **Identification:** Establish the backdoor criterion or valid instrument.
+3.  **Estimation (Where ML fits):** Use ML to estimate conditional expectations $E[Y|Z]$ and $E[D|Z]$ non-parametrically.
+
+::: {.notes}
+ML is not a magic wand for bad research design. If you have unobserved confounding, a Random Forest will just overfit the bias. We still need rigorous identification. ML simply serves as a more powerful estimator *given* the identification strategy holding.
+:::
+
+## Double Machine Learning (DML)
+
+**The "Frisch-Waugh-Lovell" of ML**
+
+*Theoretical Basis: Chernozhukov et al. (2018)*
+
+1.  **Partialling Out:** Use ML to predict $Y$ from $Z$ and $D$ from $Z$.
+2.  **Residuals:** Calculate residuals $\tilde{Y}$ and $\tilde{D}$.
+3.  **Inference:** Regress $\tilde{Y}$ on $\tilde{D}$ (OLS on residuals).
+
+**Why it works:**
+
+- **Cross-fitting:** Splits sample to avoid "overfitting bias" (regularization bias).
+- Achieves $\sqrt{N}$-consistency for the treatment coefficient even if ML models converge slower.
+
+**Application:** Estimating demand elasticity with high-dimensional consumer characteristics.
+
+## Targeted Maximum Likelihood Estimation (TMLE)
+
+**Efficiency in Binary Treatment Evaluation**
+
+*Theoretical Basis: Van der Laan & Rubin (2006)*
+
+- **Concept:** A doubly robust estimator that updates an initial outcome estimate using a "clever covariate" derived from the propensity score.
+- **Double Robustness:** Consistent if *either* the propensity score model $P(D|Z)$ **OR** the outcome model $E[Y|Z, D]$ is correctly specified.
+- **Efficiency:** Asymptotically efficient (lowest variance among consistent estimators).
+
+**Application:** Program evaluation (e.g., job training) where selection bias is driven by complex observables.
+
+## Deep Instrumental Variables (Deep IV)
+
+**Handling Non-Linearity in 2SLS**
+
+*Theoretical Basis: Hartford et al. (2017)*
+
+- **The Problem:** In standard 2SLS, if the first stage relationship ($D$ on $Z$) is highly non-linear, linear 2SLS results in a weak instrument.
+- **The Solution:** 
+    - Use Deep Neural Networks to model the instrument compliance function $g(Z)$.
+    - Maintains the exclusion restriction: $Z \perp \epsilon$.
+- **Mechanism:** Projects inputs into a latent distribution to recover the structural function.
+
+**Application:** Demand estimation where the instrument (e.g., algorithmic pricing shocks) affects price in a non-linear way.
+
+## Causal Forests & Heterogeneity
+
+**Uncovering "For Whom" the Policy Works**
+
+*Theoretical Basis: Athey & Imbens (2016); Wager & Athey (2018)*
+
+- **Goal:** Estimate Conditional Average Treatment Effects (CATE): 
+  $$ \tau(x) = E[Y_1 - Y_0 | X=x] $$
+- **Mechanism:** Adapts Random Forests to maximize heterogeneity in treatment effects rather than prediction accuracy.
+- **"Honest" Splitting:** One subsample determines the partition (tree structure), another estimates the effect within the leaf. Prevents spurious heterogeneity.
+
+**Application:** Targeted marketing or personalized medicine.
+
+## Case Study: Non-Linearities (Ecological Analogy)
+
+*Scenario: Estimating the effect of an environmental input (Depth) on output (Biomass).*
+
+- **Standard OLS:** Assumes a constant marginal effect.
+- **Causal Forest Result:**
+    - Identified **regime shifts**: Effect was positive in Region A, but zero in Region B.
+    - Driven by interacting stressors ($X_2, X_3$).
+- **Implication:** A standard "Average Treatment Effect" (ATE) would mask these offsetting effects, leading to suboptimal resource allocation.
+
+::: {.notes}
+In an economic context, this is akin to a minimum wage study finding positive employment effects in concentrated labor markets but negative effects in competitive ones. ATE would miss this nuance.
+:::
+
+## Choosing the Right Estimator
+
+| Econometric Challenge | Recommended Method | Key Advantage |
+| :--- | :--- | :--- |
+| **High-Dim Controls ($N < P$)** | **Double ML (DML)** | Handles complex nuisance parameters; returns familiar regression output. |
+| **Binary Policy / RCT** | **TMLE** | Maximum efficiency; Doubly Robust protection against misspecification. |
+| **Endogeneity + Nonlinear IV** | **Deep IV** | Recovers structural parameters when 1st stage compliance is complex. |
+| **Heterogeneity / Targeting** | **Causal Forests** | Data-driven discovery of subgroups (CATE) without pre-specifying interactions. |
+
+## Conclusion
+
+**Integrating ML into the Economist’s Toolkit**
+
+1.  **Robustness:** ML methods reduce the reliance on arbitrary parametric assumptions (e.g., linearity) regarding control variables.
+2.  **Validation:** These methods are now backed by rigorous asymptotic theory (Chernozhukov, Athey).
+3.  **Actionable Insight:** Moving from ATE to CATE (via Causal Forests) allows for optimal policy targeting, a core goal of applied microeconomics.
+
+**Final Thought:**
+Causal ML does not replace economic theory. It automates the "statistical clean-up" of confounding, allowing economists to focus on the validity of their identification strategy.
